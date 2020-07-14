@@ -16,13 +16,13 @@ const config : Config = {
     typeDefs:schema,
     resolvers : {
         Query:{
-            user:(parent,args,ctx)=>{
-                return { name:"WOnder"}
+            user:(parent,args,_ctx)=>{
+                return { name: `WOnder` };
             }
         }
     },
-    introspection: true,//these lines are required to use the gui 
-    playground: true,//   of playground
+    introspection: true, //these lines are required to use the gui 
+    playground: true, //   of playground
 
 }
 
@@ -30,9 +30,9 @@ const server : ApolloServer = new ApolloServer(config);
 
 server.applyMiddleware({
     app,
-    path: '/graphql'
+    path: `/graphql`
   });
 
 app.listen(3000,()=>{
-    console.log("We are running on http://localhost:3000/graphql")
+    console.log(`We are running on http://localhost:3000/graphql`)
 })

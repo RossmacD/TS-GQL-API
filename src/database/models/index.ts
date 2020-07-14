@@ -1,8 +1,4 @@
-  
-import User from './User';
-import Pet from './Pet';
+import User from "./User";
+import Pet from "./Pet";
 
-export {
-    User,
-    Pet
-}
+export { User, Pet };
