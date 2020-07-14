@@ -1,16 +1,13 @@
 import {Pet,User} from '../../database/models';
-// import {Resolvers} from '../../__generated__/generated-types';
+import {Resolvers} from '../../__generated__/generated-types';
 import {UserInputError} from 'apollo-server-express';
-interface Resolvers{
-    [id:string]:any
-}
+
 
 const resolvers : Resolvers = {
     Query:{
         pet:async (parent,args,ctx)=>{
             const pet:Pet= await Pet.query().findById(args.id);
-
-             return pet;          
+             return pet;
         },
         pets: async (parent,args,ctx)=>{
             const pets:Pet[]= await Pet.query();

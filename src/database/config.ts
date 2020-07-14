@@ -1,9 +1,9 @@
 const default_config = {
     client: 'pg',
     connection: {
-        database: "post",
-        user: "postgres",
-        password: "root"
+        database: process.env.DB_NAME,
+        user: process.env.DB_USER,
+        password: process.env.DB_PASS
       },
     pool: {
       min: 2,
@@ -18,6 +18,7 @@ const default_config = {
   interface KnexConfig {
     [key: string]: object;
   };
+  
   const config : KnexConfig = {
     development:{
       ...default_config

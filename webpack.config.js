@@ -1,6 +1,7 @@
 const path = require('path');
-const {CheckerPlugin} = require('awesome-typescript-loader');
+// const {CheckerPlugin} = require('awesome-typescript-loader');
 var nodeExternals = require('webpack-node-externals');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 module.exports = {
   mode: 'production',
@@ -27,12 +28,18 @@ module.exports = {
         {
             test: /\.ts$/,
             exclude: /node_modules/,
-            loaders: 'awesome-typescript-loader'
+            use:
+             [ {loader: 'ts-loader',
+              options: {
+                transpileOnly: true
+              }}
+            ]
         }
       ]
   },
   plugins:[
-    new CheckerPlugin(),
+    // new CheckerPlugin(),
+    new ForkTsCheckerWebpackPlugin()
   ]
   
 };
