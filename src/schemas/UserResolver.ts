@@ -4,7 +4,7 @@ import { Arg, Mutation, Query, Resolver } from 'type-graphql';
 import db from '../database';
 import { User } from '../models/User';
 
-@Resolver()
+@Resolver(User)
 export class UserResolver {
   @Query(() => String)
   async hello() {
