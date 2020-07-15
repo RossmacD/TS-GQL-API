@@ -1,6 +1,5 @@
 const parse = require('connection-string');
 const _ = require('lodash');
-
 require('dotenv').config();
 
 const connection = parse(process.env.DATABASE_URL);

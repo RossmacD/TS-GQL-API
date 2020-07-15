@@ -1,16 +1,18 @@
+import Knex from 'knex';
+import knexfile from '../knexfile';
+import app from './server';
 import Database from './database';
-import Server from './server';
 
+// Connect to database with knex
+// Database config is in knexfile.js
 Database.connect();
-Server.start();
 
-const shutdown = done => {
-  Database.close(() => {
-    Server.stop(done);
-  });
-};
+// Start the server
+const port = process.env.PORT || 3000;
 
-// Nodemon
-process.on('exit', shutdown.bind(null, process.exit));
-process.on('SIGINT', shutdown.bind(null, process.exit));
-process.on('uncaughtException', shutdown.bind(null, process.exit));
+const server = app.listen(port, () => {
+  console.log(`Server running at  http://${process.env.BASE_URL || 'localhost'}:${port}`);
+  console.log(
+    `GraphQL playground running at http://${process.env.BASE_URL || 'localhost'}:${port}/graphql`
+  );
+});

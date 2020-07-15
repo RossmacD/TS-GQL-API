@@ -1,5 +1,4 @@
 import Knex from 'knex';
-import { merge } from 'lodash';
 import knexfile from '../knexfile';
 
 class Database {
@@ -10,15 +9,13 @@ class Database {
     if (this.knexInstance) {
       return;
     }
-    this.config = merge({}, knexfile, options);
-    this.knexInstance = Knex(this.config);
+    this.knexInstance = Knex({ ...knexfile, ...options });
   }
 
   get query(): Knex {
     if (!this.knexInstance) {
       this.connect();
     }
-
     return this.knexInstance;
   }
 
