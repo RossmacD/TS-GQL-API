@@ -1,11 +1,13 @@
 {
   "compilerOptions": {
-    "target": "ES6",
+    "target": "ESNext",
     "module": "commonjs",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "noEmitOnError": true,
     "noImplicitAny": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
     "lib": ["es2015", "es2017"]
   },
   "include": [

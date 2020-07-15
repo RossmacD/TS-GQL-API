@@ -17,7 +17,6 @@ exports.up = async knex =>
     })
     .createTable('users', (table)=>{
       table.increments('id');
-      table.string('username');
       table.string('password');
       table.string('email')
       table.timestamp('created_at').defaultTo(knex.fn.now())

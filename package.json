@@ -29,8 +29,6 @@
     "!down": "knex migrate:rollback"
   },
   "dependencies": {
-    "@types/bcrypt": "^3.0.0",
-    "@types/compression": "^1.7.0",
     "apollo-server": "^2.1.0",
     "apollo-server-express": "^2.1.0",
     "bcrypt": "^5.0.0",
@@ -40,22 +38,24 @@
     "core-js": "^2.5.7",
     "dotenv": "^6.1.0",
     "express": "^4.16.4",
-    "graphql": "^14.0.2",
+    "graphql": "^15.3.0",
     "helmet": "^3.23.3",
     "knex": "^0.15.2",
-    "lodash": "^4.17.11",
     "morgan": "^1.9.1",
-    "pg": "^7.5.0"
+    "pg": "^7.5.0",
+    "reflect-metadata": "^0.1.13",
+    "type-graphql": "^1.0.0-rc.3"
   },
   "devDependencies": {
+    "@types/bcrypt": "^3.0.0",
     "@types/body-parser": "^1.17.0",
+    "@types/compression": "^1.7.0",
     "@types/express": "^4.16.0",
     "@types/helmet": "0.0.47",
     "@types/knex": "^0.14.26",
     "@types/lodash": "^4.14.117",
     "@types/morgan": "^1.7.35",
     "@types/node": "^10.11.7",
-    "ava": "^0.25.0",
     "nodemon": "^1.18.9",
     "prettier": "^1.14.3",
     "ts-node": "^7.0.1",

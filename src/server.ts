@@ -1,28 +1,35 @@
 import { ApolloServer } from 'apollo-server-express';
 import bodyParser from 'body-parser';
-import compress from "compression";
+import compress from 'compression';
 import express from 'express';
 import helmet from 'helmet';
 import http from 'http';
 import logger from 'morgan';
-import schema from './schema';
+import { buildSchema } from 'type-graphql';
+// import rawSchema from './schemas';
+import { UserResolver } from './schemas/UserResolver';
 
+const createApp = async () => {
+  // Our server application will be an instance of express
+  const app = express();
+  // We load up out schema created by typegraphQL
+  const schema = await buildSchema({ resolvers: [UserResolver] });
+  // We need to create an apollo server to run our graphQL
+  const apollo = new ApolloServer({ schema });
 
-// Our server application will be an instance of express
-const app = express();
-// We need to create an apollo server to run our graphQL
-const apollo = new ApolloServer({ schema });
+  // Middleware
+  app.use(logger('dev'));
+  app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded({ extended: true }));
+  app.use(helmet());
+  app.use(compress());
 
-// Middleware
-app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(helmet());
-app.use(compress());
+  // Pass on express middleware to apollo
+  apollo.applyMiddleware({ app });
+  return app;
+};
 
-// Pass on express middleware to apollo
-apollo.applyMiddleware({ app });
-
+export default createApp;
 // Creates and configures an ExpressJS web server.
 // class Server {
 //   app: express.Application;
@@ -75,4 +82,3 @@ apollo.applyMiddleware({ app });
 //   }
 // }
 
-export default app;
