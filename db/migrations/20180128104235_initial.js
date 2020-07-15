@@ -14,6 +14,10 @@ exports.up = async knex =>
         .references('authors.id')
         .onDelete('CASCADE')
         .onUpdate('CASCADE');
+    })
+    .createTable('users', (table)=>{
+      table.increments('id');
+      // table.
     });
 
-exports.down = async knex => knex.schema.dropTableIfExists('books').dropTableIfExists('authors');
+exports.down = async knex => knex.schema.dropTableIfExists('books').dropTableIfExists('authors').dropTableIfExists('users');
