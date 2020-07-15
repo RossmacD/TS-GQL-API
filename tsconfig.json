@@ -5,6 +5,7 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "noEmitOnError": true,
+    "noImplicitAny": true,
     "lib": ["es2015", "es2017"]
   },
   "include": [

@@ -1,5 +1,6 @@
 import { gql } from 'apollo-server-express';
 import db from '../database';
+import { IResolvers } from 'apollo-server';
 
 export const typeDef = gql`
   extend type Query {
@@ -20,7 +21,7 @@ export const typeDef = gql`
   }
 `;
 
-export const resolvers = {
+export const resolvers:IResolvers = {
   Query: {
     author(_, { firstName = '' }) {
       return db

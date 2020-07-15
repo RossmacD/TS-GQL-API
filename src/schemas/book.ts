@@ -1,4 +1,4 @@
-import { gql } from 'apollo-server';
+import { gql, IResolverObject } from 'apollo-server';
 import db from '../database';
 
 export const typeDef = gql`
@@ -18,7 +18,7 @@ export const typeDef = gql`
   }
 `;
 
-export const resolvers = {
+export const resolvers: IResolverObject = {
   Query: {
     book(root, { title = '' }) {
       return db

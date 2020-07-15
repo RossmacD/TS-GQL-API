@@ -1,4 +1,5 @@
 import Knex from 'knex';
+//@ts-ignore
 import knexfile from '../knexfile';
 
 class Database {
@@ -9,7 +10,7 @@ class Database {
     if (this.knexInstance) {
       return;
     }
-    this.knexInstance = Knex({ ...knexfile, ...options });
+    this.knexInstance = Knex({ ...(knexfile as any), ...options });
   }
 
   get query(): Knex {
@@ -19,7 +20,7 @@ class Database {
     return this.knexInstance;
   }
 
-  close(done): void {
+  close(done:any): void {
     if (!this.knexInstance) {
       done();
       return;
