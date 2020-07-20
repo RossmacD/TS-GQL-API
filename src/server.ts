@@ -2,7 +2,7 @@ import { ApolloServer } from 'apollo-server-express';
 import bodyParser from 'body-parser';
 import compress from 'compression';
 import connectRedis from 'connect-redis';
-import cors from 'cors'
+import cors from 'cors';
 import express from 'express';
 import session from 'express-session';
 import helmet from 'helmet';
@@ -11,7 +11,7 @@ import Redis from 'ioredis';
 import logger from 'morgan';
 import { buildSchema } from 'type-graphql';
 import { UserResolver } from './schemas/UserResolver';
-const redis = new Redis();
+const redis = new Redis(process.env.REDIS_URL);
 
 const createApp = async () => {
   // Our server application will be an instance of express
@@ -45,7 +45,7 @@ const createApp = async () => {
         client: redis,
       }),
       name: 'qid',
-      secret: 'Session_SECRET',
+      secret: process.env.SESSION_SECRET || 'oauseyfdpoiausdfvk239084672gfgwsd87twd',
       resave: false,
       saveUninitialized: false,
       cookie: {

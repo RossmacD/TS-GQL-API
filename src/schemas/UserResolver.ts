@@ -30,7 +30,7 @@ export class UserResolver {
     @Ctx() ctx: ApolloContext
   ): Promise<User | null> {
     // Get user, check the password matches the saved hash, then return the user with an authentication cookie
-    const authedUser = await findUserByEmail(email)
+    return await findUserByEmail(email)
       .then(user => validatePassword(password, user))
       .then(user => {
         // Attach the users authentication to a cookie
@@ -38,8 +38,7 @@ export class UserResolver {
         return user;
       })
       .catch(error => {
-        throw new AuthenticationError('Incorrect Password');
+        throw new AuthenticationError(error || 'Incorrect Password');
       });
-    return authedUser;
   }
 }

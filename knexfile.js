@@ -1,18 +1,12 @@
-const parse = require('connection-string');
+// const parse = require('connection-string');
 const _ = require('lodash');
 require('dotenv').config();
 
-const connection = parse(process.env.DATABASE_URL);
+// const connection = parse(process.env.DATABASE_URL);
 
 const defaults = {
   client: 'pg',
-  connection: {
-    user: connection.user || 'root',
-    password: connection.password || '',
-    host: connection.hosts && connection.hosts[0].name,
-    port: (connection.hosts && connection.hosts[0].port) || 5432,
-    database: connection.path[0],
-  },
+  connection: process.env.DATABASE_URL,
   migrations: {
     directory: `${__dirname}/db/migrations`,
   },
