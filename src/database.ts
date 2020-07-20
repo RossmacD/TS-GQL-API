@@ -1,5 +1,5 @@
 import Knex from 'knex';
-//@ts-ignore
+// @ts-ignore
 import knexfile from '../knexfile';
 
 class Database {
@@ -20,7 +20,7 @@ class Database {
     return this.knexInstance;
   }
 
-  close(done:any): void {
+  close(done: any): void {
     if (!this.knexInstance) {
       done();
       return;
@@ -31,3 +31,4 @@ class Database {
 }
 
 export default new Database();
+

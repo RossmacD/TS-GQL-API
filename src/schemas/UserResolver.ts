@@ -1,14 +1,16 @@
-import { gql, IResolvers } from 'apollo-server';
+import { AuthenticationError, gql, IResolvers, UserInputError } from 'apollo-server';
 import bcrypt from 'bcrypt';
-import { Arg, Mutation, Query, Resolver } from 'type-graphql';
+import { Arg, Ctx, Mutation, Query, Resolver } from 'type-graphql';
+import { findUserByEmail, validatePassword } from '../controllers/UserController';
 import db from '../database';
 import { User } from '../models/User';
+import { ApolloContext } from '../types/ApolloContext';
 
 @Resolver(User)
 export class UserResolver {
   @Query(() => String)
-  async hello() {
-    return 'hello';
+  async users() {
+    return db.query('users');
   }
 
   @Mutation(() => User)
@@ -20,65 +22,24 @@ export class UserResolver {
       .returning('*');
     return user;
   }
+
+  @Mutation(() => User, { nullable: true })
+  async login(
+    @Arg('email') email: string,
+    @Arg('password') password: string,
+    @Ctx() ctx: ApolloContext
+  ): Promise<User | null> {
+    // Get user, check the password matches the saved hash, then return the user with an authentication cookie
+    const authedUser = await findUserByEmail(email)
+      .then(user => validatePassword(password, user))
+      .then(user => {
+        // Attach the users authentication to a cookie
+        ctx.req.session.userId = user.id;
+        return user;
+      })
+      .catch(error => {
+        throw new AuthenticationError('Incorrect Password');
+      });
+    return authedUser;
+  }
 }
-
-// export const typeDef = gql`
-//   extend type Query {
-//     user(id: String): User
-//     users(limit: Int): [User]
-//   }
-
-//   extend type Mutation {
-//     register(username: String!, email: String!, password: String!): User
-//     login(email: String!, password: String!): User
-//   }
-
-//   type User {
-//     id: ID!
-//     username: String!
-//     email: String!
-//     password: String!
-//   }
-// `;
-
-// export const resolvers: IResolvers = {
-//   Query: {
-//     user(root, { id = '' }) {
-//       return db
-//         .query('users')
-//         .where({ id })
-//         .first();
-//     },
-//     users(root, { limit = '' }) {
-//       return db.query('users').limit(limit);
-//     },
-//   },
-//   Mutation: {
-//     async register(root, { username, email, password }) {
-//       // Hash the password for security
-//       const hash = await bcrypt.hash(password, 10);
-//       // Put into user with hashed password into database
-//       const [user] = await db
-//         .query('users')
-//         .insert({ username, email, password: hash })
-//         .returning('*');
-//       return user;
-//     },
-//     async login(root, { email, password }) {
-//       // Get user
-//       const user = await db
-//         .query('users')
-//         .where({ email })
-//         .first();
-//       if (!user) {
-//         return null;
-//       }
-//       // Check password against hash
-//       const valid = await bcrypt.compare(password, user.password);
-//       if (valid) {
-//         return user;
-//       }
-//       return null;
-//     },
-//   },
-// };
