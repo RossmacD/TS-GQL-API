@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 import { Arg, Ctx, Mutation, Query, Resolver } from 'type-graphql';
 import { findUserByEmail, validatePassword } from '../controllers/UserController';
 // import db from '../database';
-import { User, UsersTbl } from '../models/User';
+import { User, UsersTbl, usersByProperty } from '../models/User';
 import { ApolloContext } from '../types/ApolloContext';
 
 @Resolver(User)
@@ -11,6 +11,12 @@ export class UserResolver {
   @Query(() => String)
   async users(): Promise<User[]> {
     return UsersTbl().select('*');
+  }
+  
+  @Query(() => User, { nullable: true })
+  async getSelf(@Ctx() ctx: ApolloContext) {
+    if (!ctx.req.session.userId) throw new AuthenticationError('Session timed out');
+    return usersByProperty({ id: ctx.req.session.userId }).first();
   }
 
   @Mutation(() => User)
