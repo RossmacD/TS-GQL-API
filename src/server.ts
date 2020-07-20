@@ -11,6 +11,7 @@ import Redis from 'ioredis';
 import logger from 'morgan';
 import { buildSchema } from 'type-graphql';
 import { UserResolver } from './schemas/UserResolver';
+
 const redis = new Redis(process.env.REDIS_URL);
 
 const createApp = async () => {
@@ -18,9 +19,10 @@ const createApp = async () => {
   const app = express();
   // We load up out schema created by typegraphQL
   const schema = await buildSchema({ resolvers: [UserResolver] });
-  // We need to create an apollo server to run our graphQL
-  const apollo = new ApolloServer({ schema, context: req => ({ req }) });
+  // We need to create an apollo server to run our graphQL - the context lets us pass the request into the resolvers
+  const apollo = new ApolloServer({ schema, context: (req) => ({ req }) });
 
+  // Any normal routes can be set up here, currently there are none
   const router = express.Router();
   app.use('/', router);
 
@@ -38,6 +40,7 @@ const createApp = async () => {
     })
   );
 
+  // Set up redis
   const RedisStore = connectRedis(session);
   app.use(
     session({
@@ -62,55 +65,3 @@ const createApp = async () => {
 };
 
 export default createApp;
-// Creates and configures an ExpressJS web server.
-// class Server {
-//   app: express.Application;
-//   server: http.Server;
-//   apollo: ApolloServer;
-
-//   constructor() {
-//     this.app = express();
-//     this.apollo = new ApolloServer({ schema });
-//     this.middleware();
-//     this.routes();
-//   }
-
-//   middleware() {
-//     this.app.use(logger('dev'));
-//     this.app.use(bodyParser.json());
-//     this.app.use(bodyParser.urlencoded({ extended: true }));
-
-//     this.apollo.applyMiddleware({
-//       app: this.app,
-//     });
-//   }
-
-//   routes() {
-//     /* This is just to get up and running, and to make sure what we've got is
-//      * working so far. This function will change when we start to add more
-//      * API endpoints */
-//     const router = express.Router();
-
-//     this.app.use('/', router);
-//   }
-
-//   start(cb = () => null) {
-//     const port = process.env.PORT || 3000;
-
-//     this.server = this.app.listen(port, () => {
-//       // if (err) {
-//       //   throw err;
-//       // }
-//       // tslint:disable-next-line
-//       console.log(`Server running on port ${port}`); // eslint-disable-line
-//       cb();
-//     });
-//   }
-
-//   stop(cb = () => null) {
-//     if (this.server) {
-//       this.server.close(cb);
-//     }
-//   }
-// }
-

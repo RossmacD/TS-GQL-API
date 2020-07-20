@@ -1,34 +1,9 @@
 import Knex from 'knex';
 // @ts-ignore
 import knexfile from '../knexfile';
+import { User } from './models/User';
 
-class Database {
-  private knexInstance: Knex;
-  private config: object;
-
-  connect(options = {}): void {
-    if (this.knexInstance) {
-      return;
-    }
-    this.knexInstance = Knex({ ...(knexfile as any), ...options });
-  }
-
-  get query(): Knex {
-    if (!this.knexInstance) {
-      this.connect();
-    }
-    return this.knexInstance;
-  }
-
-  close(done: any): void {
-    if (!this.knexInstance) {
-      done();
-      return;
-    }
-
-    this.knexInstance.destroy(done);
-  }
-}
-
-export default new Database();
+// The knex object is essentially the object that represents the database / connection
+// Database config is in the knexfile,
+export const knex = Knex({ ...(knexfile as any) });
 

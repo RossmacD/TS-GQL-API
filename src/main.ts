@@ -1,6 +1,6 @@
 // This has to be imported for typegraphQL
 import 'reflect-metadata';
-import Database from './database';
+// import Database from './database';
 import createApp from './server';
 const port = process.env.PORT || 3000;
 const baseURL= process.env.BASE_URL || 'localhost';
@@ -9,9 +9,6 @@ const baseURL= process.env.BASE_URL || 'localhost';
  *  Start the app asynchronously to allow us to use await
  */
 const start = async () => {
-  // Connect to database with knex
-  // Database config is in ../knexfile.js
-  Database.connect();
   const app = await createApp();
   // Start the server
   app

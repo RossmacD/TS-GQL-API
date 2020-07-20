@@ -1,14 +1,10 @@
-import db from '../database';
 import bcrypt from 'bcrypt';
-import { User } from '../models/User';
+import { User, usersByProperty } from '../models/User';
 // export const login = (res, rej) => {};
 
 export const findUserByEmail = (email: string): Promise<User> => {
   return new Promise(async (res, rej) => {
-    const user = await db
-      .query('users')
-      .where({ email })
-      .first();
+    const user = usersByProperty({ email }).first();
     if (!user) {
       rej();
     }
