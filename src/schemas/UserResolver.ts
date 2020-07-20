@@ -1,10 +1,11 @@
 import { AuthenticationError, gql, IResolvers, UserInputError } from 'apollo-server';
 import bcrypt from 'bcrypt';
-import { Arg, Ctx, Mutation, Query, Resolver } from 'type-graphql';
+import { Arg, Ctx, Mutation, Query, Resolver, Authorized, UseMiddleware } from 'type-graphql';
 import { findUserByEmail, validatePassword } from '../controllers/UserController';
 // import db from '../database';
 import { User, UsersTbl, usersByProperty } from '../models/User';
 import { ApolloContext } from '../types/ApolloContext';
+import { authCheck } from '../middleware/auth';
 
 @Resolver(User)
 export class UserResolver {
@@ -12,10 +13,10 @@ export class UserResolver {
   async users(): Promise<User[]> {
     return UsersTbl().select('*');
   }
-  
+
   @Query(() => User, { nullable: true })
+  @UseMiddleware(authCheck)
   async getSelf(@Ctx() ctx: ApolloContext) {
-    if (!ctx.req.session.userId) throw new AuthenticationError('Session timed out');
     return usersByProperty({ id: ctx.req.session.userId }).first();
   }
 

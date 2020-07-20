@@ -11,6 +11,7 @@ import Redis from 'ioredis';
 import logger from 'morgan';
 import { buildSchema } from 'type-graphql';
 import { UserResolver } from './schemas/UserResolver';
+import { authCheck } from './middleware/auth';
 
 const redis = new Redis(process.env.REDIS_URL);
 
@@ -20,7 +21,10 @@ const createApp = async () => {
   // We load up out schema created by typegraphQL
   const schema = await buildSchema({ resolvers: [UserResolver] });
   // We need to create an apollo server to run our graphQL - the context lets us pass the request into the resolvers
-  const apollo = new ApolloServer({ schema, context: ({ req, res }) => ({ req }) });
+  const apollo = new ApolloServer({
+    schema,
+    context: ({ req, res }) => ({ req }),
+  });
 
   // Any normal routes can be set up here, currently there are none
   // const router = express.Router();
