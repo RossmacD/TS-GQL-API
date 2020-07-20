@@ -40,6 +40,7 @@ export class UserResolver {
       .then((user) => validatePassword(password, user))
       .then((user) => {
         // Attach the users authentication to a cookie
+        // console.log(ctx.req)
         ctx.req.session.userId = user.id;
         return user;
       })

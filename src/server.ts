@@ -20,11 +20,11 @@ const createApp = async () => {
   // We load up out schema created by typegraphQL
   const schema = await buildSchema({ resolvers: [UserResolver] });
   // We need to create an apollo server to run our graphQL - the context lets us pass the request into the resolvers
-  const apollo = new ApolloServer({ schema, context: (req) => ({ req }) });
+  const apollo = new ApolloServer({ schema, context: ({ req, res }) => ({ req }) });
 
   // Any normal routes can be set up here, currently there are none
-  const router = express.Router();
-  app.use('/', router);
+  // const router = express.Router();
+  // app.use('/', router);
 
   // Middleware
   app.use(logger('dev'));
